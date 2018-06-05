@@ -3,6 +3,9 @@
   "version": "0.0.1",
   "author": "Eric Lanehart <eric@pushred.co> (http://pushred.co)",
   "license": "ISC",
+  "bin": {
+    "func": "lib/func.cli.js"
+  },
   "scripts": {
     "test": "jest"
   },
@@ -18,8 +21,11 @@
     "js-yaml": "^3.11.0"
   },
   "dependencies": {
+    "chalk": "^2.4.1",
     "chroma-js": "^1.3.7",
+    "cosmiconfig": "^5.0.5",
     "lodash.isplainobject": "^4.0.6",
-    "lodash.kebabcase": "^4.1.1"
+    "lodash.kebabcase": "^4.1.1",
+    "meow": "^5.0.0"
   }
 }
