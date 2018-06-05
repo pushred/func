@@ -1,7 +1,11 @@
 {
-  "name": "func",
+  "name": "func-css",
   "version": "0.0.1",
   "author": "Eric Lanehart <eric@pushred.co> (http://pushred.co)",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/pushred/func.git"
+  },
   "license": "ISC",
   "bin": {
     "func": "lib/func.cli.js"
