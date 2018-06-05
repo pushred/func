@@ -6,6 +6,9 @@
     "type": "git",
     "url": "https://github.com/pushred/func.git"
   },
+  "files": [
+    "lib"
+  ],
   "license": "ISC",
   "bin": {
     "func": "lib/func.cli.js"
