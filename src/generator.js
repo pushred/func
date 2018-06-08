@@ -56,6 +56,7 @@ function expandClasses({ classes = {}, colors = {} }) {
 
     const value = classes[className];
     const adjusterFn = /[a-z]*\(.*\)/.exec(value);
+
     const props = adjusterFn
       ? value.replace(adjusterFn[0], '').split(/\s/)
       : value.split(/\s/);
@@ -69,13 +70,16 @@ function expandClasses({ classes = {}, colors = {} }) {
       });
 
     const colorKey = props[0];
-    const colorValue = adjusterFn
-      ? adjustColor(chromaColors[colorKey], adjusterFn[0])
-      : chromaColors[colorKey];
+    const chromaColor = chromaColors[colorKey];
+    const adjustedColor = adjusterFn && adjustColor(chromaColor, adjusterFn[0]);
+
+    const colorValue = chromaColor
+      ? (adjustedColor || chromaColor).css('hsl')
+      : colorKey; // assume any values missing in parsed colors are keywords or other values that should be used as-is
 
     if (!colorValue) return output;
 
-    const styles = `${property}: ${colorValue.css('hsl').replace(/,/g, ', ')}`;
+    const styles = `${property}: ${colorValue.replace(/,/g, ', ')}`;
 
     return [
       ...output,

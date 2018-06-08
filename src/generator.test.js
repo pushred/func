@@ -1,4 +1,4 @@
-import { expandClasses, generateClasses, generateProps } from './generator';
+import { expandClasses, generateClasses } from './generator';
 import { parse } from './colors';
 
 function testExpandClasses() {
@@ -8,6 +8,19 @@ function testExpandClasses() {
     white: '#fff',
     blue: '#0000ff',
   };
+
+  test('css keywords passthrough', () => {
+    const classes = {
+      'button': 'currentColor',
+      'button-bg': 'inherit',
+      'button-border': 'initial',
+    };
+
+    const output = expandClasses({ classes, colors });
+    expect(output).toEqual(expect.stringContaining('.button { color: currentColor'));
+    expect(output).toEqual(expect.stringContaining('.button-bg { background-color: inherit'));
+    expect(output).toEqual(expect.stringContaining('.button-border { border-color: initial'));
+  });
 
   test('assigns named color to specified classes', () => {
     const classes = {
@@ -100,36 +113,7 @@ function testGenerateClasses() {
   });
 }
 
-function testGenerateProps() {
-  const colors = {
-    red: '#ff0000',
-    white: '#fff',
-  };
-
-  const classes = {
-    'button': 'white',
-    'button-bg': 'red',
-    'button-border': 'red',
-  };
-
-  test('creates a property for each specified class', () => {
-    const output = generateProps({ classes, colors });
-
-    expect(Object.keys(output)).toEqual(
-      expect.arrayContaining(['button', 'buttonBg', 'buttonBorder'])
-    );
-  });
-
-  test('assigns hex values for named colors', () => {
-    const output = generateProps({ classes, colors });
-    expect(Object.keys(output).map(key => output[key])).toEqual(
-      expect.arrayContaining(['#ffffff', '#ff0000', '#ff0000'])
-    );
-  });
-}
-
 describe('generator', () => {
   describe('expandClasses', testExpandClasses);
   describe('generateClasses', testGenerateClasses);
-  describe('generateProps', testGenerateProps);
 });
