@@ -120,13 +120,13 @@ function generateClasses({ colors = {}, properties = {}, states = [] }) {
 
 /**
  * generateProps
- * Create an object of normalized hex color properties for each class
+ * Create an object of normalized hex color properties for each class and color
  */
 
 function generateProps({ classes = {}, colors = {} }) {
   const chromaColors = parse(colors);
 
-  return Object.keys(classes).reduce((output, className) => {
+  const classProps = Object.keys(classes).reduce((output, className) => {
     const value = classes[className];
     const adjusterFn = /[a-z]*\(.*\)/.exec(value);
     const props = adjusterFn
@@ -145,6 +145,19 @@ function generateProps({ classes = {}, colors = {} }) {
       [camelCase(className)]: colorValue.hex(),
     };
   }, {});
+
+  const colorProps = Object.keys(colors).reduce((output, colorName) => {
+    if (!chromaColors[colorName]) return output;
+    return {
+      ...output,
+      [camelCase(colorName)]: chromaColors[colorName].hex()
+    };
+  }, {});
+
+  return {
+    ...classProps,
+    ...colorProps,
+  };
 }
 
 module.exports = {

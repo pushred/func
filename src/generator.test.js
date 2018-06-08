@@ -1,4 +1,4 @@
-import { expandClasses, generateClasses } from './generator';
+import { expandClasses, generateClasses, generateProps } from './generator';
 import { parse } from './colors';
 
 function testExpandClasses() {
@@ -166,7 +166,37 @@ function testGenerateClasses() {
   });
 }
 
+function testGenerateProps() {
+  test('snapshot', () => {
+    const colors = {
+      red: '#ff0000',
+      white: '#fff',
+      blue: '#0000ff',
+    };
+
+    const classes = {
+      'button': 'white',
+      'button-bg': 'red',
+      'button-border': 'red',
+    };
+
+    const config = {
+      properties: {
+        color: '${name}-color',
+      },
+      states: [
+        'link',
+        'visited',
+        'active',
+      ],
+    };
+
+    expect(generateProps({ ...config, classes, colors })).toMatchSnapshot();
+  });
+}
+
 describe('generator', () => {
   describe('expandClasses', testExpandClasses);
   describe('generateClasses', testGenerateClasses);
+  describe('generateProps', testGenerateProps);
 });

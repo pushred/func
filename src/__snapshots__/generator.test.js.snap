@@ -35,3 +35,14 @@ exports[`generator generateClasses snapshot 1`] = `
 .blue-color:visited { color: hsl(240, 100%, 50%) }
 .blue-color:active { color: hsl(240, 100%, 50%) }"
 `;
+
+exports[`generator generateProps snapshot 1`] = `
+Object {
+  "blue": "#0000ff",
+  "button": "#ffffff",
+  "buttonBg": "#ff0000",
+  "buttonBorder": "#ff0000",
+  "red": "#ff0000",
+  "white": "#ffffff",
+}
+`;
