@@ -48,7 +48,7 @@ function getProperty({
  * Expands color/pseudo-class shorthand config into one or more classes
  */
 
-function expandClasses({ classes, colors }) {
+function expandClasses({ classes = {}, colors = {} }) {
   const chromaColors = parse(colors);
 
   return Object.keys(classes).reduce((output, className) => {
@@ -90,7 +90,7 @@ function expandClasses({ classes, colors }) {
  * Creates a named color class for each configured property
  */
 
-function generateClasses({ colors, properties = {}, states = [] }) {
+function generateClasses({ colors = {}, properties = {}, states = [] }) {
   const chromaColors = parse(colors);
 
   return Object.keys(colors).reduce((output, colorKey) => {
@@ -118,7 +118,7 @@ function generateClasses({ colors, properties = {}, states = [] }) {
  * Create an object of normalized hex color properties for each class
  */
 
-function generateProps({ classes, colors }) {
+function generateProps({ classes = {}, colors = {} }) {
   const chromaColors = parse(colors);
 
   return Object.keys(classes).reduce((output, className) => {
