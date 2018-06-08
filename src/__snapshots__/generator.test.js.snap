@@ -1,0 +1,37 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`generator expandClasses snapshot 1`] = `
+".button { color: hsl(0, 0%, 100%) }
+.button:link { color: hsl(0, 0%, 100%) }
+.button:visited { color: hsl(0, 0%, 100%) }
+.button:active { color: hsl(0, 0%, 100%) }
+.button *:link { color: hsl(0, 0%, 100%) }
+.button *:visited { color: hsl(0, 0%, 100%) }
+.button *:active { color: hsl(0, 0%, 100%) }
+.button-bg { background-color: hsl(0, 100%, 50%) }
+.button-bg:link { background-color: hsl(0, 100%, 50%) }
+.button-bg:visited { background-color: hsl(0, 100%, 50%) }
+.button-bg:active { background-color: hsl(0, 100%, 50%) }
+.button-bg-hover:hover { background-color: hsl(0, 100%, 50%) }
+.button-bg-hover *:hover { background-color: hsl(0, 100%, 50%) }
+.button-border { border-color: hsl(0, 100%, 50%) }
+.button-border:link { border-color: hsl(0, 100%, 50%) }
+.button-border:visited { border-color: hsl(0, 100%, 50%) }
+.button-border:active { border-color: hsl(0, 100%, 50%) }
+.input::placeholder { color: hsl(0, 0%, 98.04%) }"
+`;
+
+exports[`generator generateClasses snapshot 1`] = `
+".red-color { color: hsl(0, 100%, 50%) }
+.red-color:link { color: hsl(0, 100%, 50%) }
+.red-color:visited { color: hsl(0, 100%, 50%) }
+.red-color:active { color: hsl(0, 100%, 50%) }
+.white-color { color: hsl(0, 0%, 100%) }
+.white-color:link { color: hsl(0, 0%, 100%) }
+.white-color:visited { color: hsl(0, 0%, 100%) }
+.white-color:active { color: hsl(0, 0%, 100%) }
+.blue-color { color: hsl(240, 100%, 50%) }
+.blue-color:link { color: hsl(240, 100%, 50%) }
+.blue-color:visited { color: hsl(240, 100%, 50%) }
+.blue-color:active { color: hsl(240, 100%, 50%) }"
+`;

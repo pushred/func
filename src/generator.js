@@ -80,12 +80,13 @@ function expandClasses({ classes = {}, colors = {} }) {
     if (!colorValue) return output;
 
     const styles = `${property}: ${colorValue.replace(/,/g, ', ')}`;
+    const hasHoverState = value.includes('hover');
 
     return [
       ...output,
-      `.${className} { ${styles} }`,
+      !hasHoverState && `.${className} { ${styles} }`,
       ...states.map(pseudoClassName => `.${className}${pseudoClassName} { ${styles} }`),
-    ];
+    ].filter(Boolean);
   }, []).join('\n');
 }
 
@@ -111,7 +112,7 @@ function generateClasses({ colors = {}, properties = {}, states = [] }) {
         return [
           `.${className} { ${styles} }`,
           ...states.map(pseudoClassName => `.${className}:${pseudoClassName} { ${styles} }`),
-        ];
+        ].join('\n');
       }),
     ];
   }, []).join('\n');

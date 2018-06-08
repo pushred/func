@@ -49,12 +49,25 @@ function testExpandClasses() {
     expect(output).toEqual(expect.stringContaining('.button-border:link { border-color'));
   });
 
-  test('pseudo-elements', () => {
+  test('hover pseudo-classes do not apply property to simple base selector', () => {
     const classes = {
-      'input': 'gray ::placeholder',
+      'button': 'white :link',
+      'button-hover': 'blue :hover',
     };
 
     const output = expandClasses({ classes, colors });
+    expect(output).toEqual(expect.stringContaining('.button:link { color'));
+    expect(output).toEqual(expect.stringContaining('.button-hover:hover { color'));
+    expect(output).not.toEqual(expect.stringContaining('.button-hover { color'));
+  });
+
+  test('pseudo-elements', () => {
+    const classes = {
+      'input::placeholder': 'gray',
+    };
+
+    const output = expandClasses({ classes, colors });
+    expect(output).not.toEqual(expect.stringContaining('.input { color'));
     expect(output).toEqual(expect.stringContaining('.input::placeholder { color'));
   });
 
@@ -67,6 +80,25 @@ function testExpandClasses() {
     const output = expandClasses({ classes, colors });
     expect(output).toEqual(expect.stringContaining('hsla(0, 0%, 100%, 0.8)'));
     expect(output).toEqual(expect.stringContaining('hsla(0, 0%, 100%, 0.9)'));
+  });
+
+  test('snapshot', () => {
+    const colors = {
+      red: '#ff0000',
+      gray: '#fafafa',
+      white: '#fff',
+      blue: '#0000ff',
+    };
+
+    const classes = {
+      'button': 'white :link :visited :active *:link *:visited *:active',
+      'button-bg': 'red &:link &:visited &:active',
+      'button-bg-hover': 'red :hover *:hover',
+      'button-border': 'red &:link &:visited &:active',
+      'input::placeholder': 'gray',
+    };
+
+    expect(expandClasses({ classes, colors })).toMatchSnapshot();
   });
 }
 
@@ -110,6 +142,27 @@ function testGenerateClasses() {
 
     expect(output).toEqual(expect.stringContaining('.red-color:link'));
     expect(output).toEqual(expect.stringContaining('.blue-color:link'));
+  });
+
+  test('snapshot', () => {
+    const colors = {
+      red: '#ff0000',
+      white: '#fff',
+      blue: '#0000ff',
+    };
+
+    const config = {
+      properties: {
+        color: '${name}-color',
+      },
+      states: [
+        'link',
+        'visited',
+        'active',
+      ],
+    };
+
+    expect(generateClasses({ ...config, colors })).toMatchSnapshot();
   });
 }
 
