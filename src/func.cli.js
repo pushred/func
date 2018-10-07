@@ -17,6 +17,7 @@ const HELP = `
 
   Options
     -o, --output    Filepath for generated stylesheet
+    --jsonOutput    Filepath for generated JSON
     --config        Custom config filename, defaults to (funcrc|func.config).(json|yaml|yml)
 `;
 
