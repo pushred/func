@@ -1,4 +1,7 @@
 lib
 node_modules
+test/func.css
+test/func.json
+test/package-lock.json
 
 TODO*

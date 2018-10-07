@@ -1,13 +1,28 @@
 #!/usr/bin/env node
 
-const chalk = require('chalk');
 const cosmiconfig = require('cosmiconfig');
 const meow = require('meow');
-const { dirname, join, resolve } = require('path');
+const { basename, dirname, join, resolve } = require('path');
 const { writeFileSync } = require('fs');
 
+let chokidar;
+
+try {
+  chokidar = require('chokidar');
+} catch (err) {
+  chokidar = null;
+}
+
+const { DEFAULTS } = require('./consts');
 const { parse } = require('./colors');
+const log = require('./logger');
 const { expandClasses, generateClasses, generateProps } = require('./generator');
+
+const {
+  ERR_INVALID_CONFIG_ARG,
+  ERR_MISSING_CHOKIDAR,
+  ERR_NO_CONFIG
+} = require('./errors');
 
 const HELP = `
   Usage
@@ -19,22 +34,8 @@ const HELP = `
     -o, --output    Filepath for generated stylesheet
     --jsonOutput    Filepath for generated JSON
     --config        Custom config filename, defaults to (funcrc|func.config).(json|yaml|yml)
+    --watch         Watch config files and regenerate on changes
 `;
-
-const DEFAULTS = {
-  configFilenames: [
-    'package.json',
-    '.funcrc',
-    '.funcrc.json',
-    '.funcrc.yaml',
-    '.funcrc.yml',
-    'func.config.json',
-    'func.config.yaml',
-    'func.config.yml',
-  ],
-  output: 'func.css',
-  jsonOutput: 'func.json',
-};
 
 const cli = meow(HELP, {
   flags: {
@@ -61,21 +62,7 @@ const COSMIC_OPTIONS = {
 };
 
 function loadConfigs(result) {
-  if (!result) {
-    const err = new Error('No configuration found');
-
-    err.details = `
-      Specify a func key in your package.json or create one of these files somewhere in your project:
-
-      ${DEFAULTS.configFilenames.slice(1).join('\n')}
-
-      A custom filename may be specified with --config
-
-      Please reference the README for details regarding the structure of the config.
-    `;
-
-    throw err;
-  }
+  if (!result) return Promise.reject(ERR_NO_CONFIG);
 
   const config = result.config;
   const { classes, colors } = result.config.files;
@@ -93,32 +80,6 @@ function loadConfigs(result) {
     classes: result[1].config,
     colors: result[2].config,
   }));
-}
-
-function logError(err) {
-  console.error(chalk.red(err));
-  if (!err.details && !err.stack) return;
-
-  if (err.details) {
-    return console.log(
-      chalk.gray(
-        err.details
-          .split(/\n/)
-          .map(s => s.trim())
-          .map(s => s.padStart(2 + s.length))
-          .join('\n')
-      )
-    );
-  }
-
-  console.log(chalk.gray(
-    err.stack
-      .split(/\n/)
-      .slice(1)
-      .map(s => s.trim())
-      .map(s => s.padStart(2 + s.length))
-      .join('\n')
-  ), '\n');
 }
 
 function generate(params) {
@@ -141,31 +102,60 @@ function generateStylesheet({ func, classes, colors } = {}) {
   ].filter(Boolean).join(/\n/);
 }
 
+function updateOutput(searchResult) {
+  return loadConfigs(searchResult)
+    .then(generate)
+    .then(output => {
+      const stylesheet = output[0];
+      const stylesheetPath = cli.flags.output || DEFAULTS.output;
+
+      writeFileSync(stylesheetPath, stylesheet);
+      log.save('stylesheet saved to', stylesheetPath);
+
+      const json = output[1];
+      const targetBase = dirname(stylesheetPath);
+      const jsonPath = cli.flags.jsonOutput || join(targetBase, DEFAULTS.jsonOutput);
+
+      if (!json) return;
+      writeFileSync(jsonPath, json);
+      log.save('JSON saved to', jsonPath);
+    })
+    .catch(log.error);
+}
+
 function validateArgs() {
   if (cli.flags.config && !/json|yaml|yml/.test(cli.flags.config)) {
-    throw new Error('Config filename must have a .json, .yaml, or .yml extension');
+    return Promise.reject(ERR_INVALID_CONFIG_ARG);
   }
 
   return Promise.resolve();
 }
 
+function watch({ searchResult }) {
+  if (!chokidar) return Promise.reject(ERR_MISSING_CHOKIDAR);
+  if (searchResult.isEmpty) return Promise.reject(ERR_NO_CONFIG);
+
+  const files = searchResult.config.files || {};
+
+  const configFiles = [
+    files.classes && resolve(dirname(searchResult.filepath), files.classes),
+    files.colors && resolve(dirname(searchResult.filepath), files.colors)
+  ].filter(Boolean);
+
+  chokidar.watch(configFiles)
+    .on('ready', () => { log.info('watching…') })
+    .on('change', (path) => {
+      getConfig.clearLoadCache();
+      log.info(`${basename(path)} changed, regenerating…`);
+      updateOutput(searchResult);
+    });
+}
+
 validateArgs()
   .then(cosmiconfig('func', COSMIC_OPTIONS).search)
-  .then(loadConfigs)
-  .then(generate)
-  .then(output => {
-    const stylesheet = output[0];
-    const stylesheetPath = cli.flags.output || DEFAULTS.output;
-
-    writeFileSync(stylesheetPath, stylesheet);
-    console.info(chalk.green('✔'), chalk.gray('stylesheet saved to'), chalk.cyan(stylesheetPath));
-
-    const json = output[1];
-    const targetBase = dirname(stylesheetPath);
-    const jsonPath = cli.flags.jsonOutput || join(targetBase, DEFAULTS.jsonOutput);
-
-    if (!json) return;
-    writeFileSync(jsonPath, json);
-    console.info(chalk.green('✔'), chalk.gray('JSON saved to'), chalk.cyan(jsonPath));
+  .then(searchResult => {
+    return cli.flags.watch
+      ? watch({ searchResult })
+      : updateOutput(searchResult);
   })
-  .catch(logError);
+  .catch(log.error);

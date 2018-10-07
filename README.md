@@ -53,6 +53,7 @@ $ func --help
     -o, --output    Filepath for generated stylesheet
     --jsonOutput    Filepath for generated JSON
     --config        Custom config filename, defaults to (funcrc|func.config).(json|yaml|yml)
+    --watch         Watch config files and regenerate on changes
 ```
 
 Configuration
