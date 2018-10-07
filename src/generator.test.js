@@ -193,6 +193,19 @@ function testGenerateProps() {
 
     expect(generateProps({ ...config, classes, colors })).toMatchSnapshot();
   });
+
+  test('values with alpha use rgba notation', () => {
+    const colors = {
+      white: '#fff',
+    };
+
+    const classes = {
+      'button': 'white a(0.5)',
+    };
+
+    const props = generateProps({ classes, colors });
+    expect(props.button).toEqual('rgba(255, 255, 255, 0.5)');
+  });
 }
 
 describe('generator', () => {

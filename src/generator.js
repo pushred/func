@@ -142,7 +142,9 @@ function generateProps({ classes = {}, colors = {} }) {
 
     return {
       ...output,
-      [camelCase(className)]: colorValue.hex(),
+      [camelCase(className)]: colorValue.alpha() === 1
+        ? colorValue.hex()
+        : colorValue.css('rgba').replace(/,/g, ', ')
     };
   }, {});
 
