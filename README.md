@@ -13,8 +13,9 @@ Table of Contents
 - [Install](#install)
 - [Usage](#usage)
 - [Configuration](#configuration)
-- [Custom Classes](#custom-classes)
 - [Colors](#colors)
+- [Classes](#classes)
+- [Output](#output)
 - [Contribute](#contribute)
 - [License](#license)
 
@@ -68,39 +69,43 @@ Configuration
 
 - `states` array of [pseudo-class][] names to generate for each property
 
-Output
+Colors
 ------
 
-### CSS
+Define your palette as a mapping of color names to values in any of these formats:
 
-Specified classes are expanded with colors in HSL functional notation, or HSLA wherever alpha is specified.
+- `#ff0000` hex
+- `#fff` shorthand hex, `#` is optional
+- `255, 0, 0` comma-separated rgb values
 
-```css
-.red-color { color: hsl(0, 100%, 50%) }
-.bg-red-color { background-color: hsl(0, 100%, 50%) }
-.b--red-color { border-color: hsla(0, 100%, 50%, 0.5) }
-.blue-color { color: hsl(240, 100%, 50%) }
-.bg-blue-color { background-color: hsl(240, 100%, 50%) }
-.b--blue-color { border-color: hsla(240, 100%, 50%, 0.5) }
+These color models can also be used:
+
+- HSL
+- HSB
+- HSV
+- Lab
+- RGB
+
+…with a verbose object:
+
+```yaml
+hue: 0
+saturation: 100%
+lightness: 50%
 ```
 
-### JSON
+…or a terse object:
 
-JSON property names are camelCased and colors are output in hex notation for broader compatibility. rgba values are used whenever alpha is specified.
-
-```json
-{
-  "redColor": "#f00000",
-  "redBg": "#f00000",
-  "redBorder": "rgba(240, 0, 0, 0.5)",
-  "blueColor": "#0000ff",
-  "blueBg": "#0000ff",
-  "blueBorder": "rgba(0, 0, 255, 0.5)"
-}
+```yaml
+h: 0
+s: 100%
+l: 50%
 ```
 
-Custom Classes
---------------
+Colors are parsed and converted with the powers of [chroma.js][]
+
+Classes
+-------
 
 It’s often best to avoid including the names of colors in your classes. Stay flexible with role-based names mapped to colors:
 
@@ -172,40 +177,36 @@ Only this adjuster is supported for now. You can specify additional shades and t
 
 Classes mapped to [CSS Keywords][css-keywords] such as `currentColor` and `transparent` can also be defined. Any values that don’t match a named color will passthrough.
 
-Colors
+Output
 ------
 
-Define your palette as a mapping of color names to values in any of these formats:
+### CSS
 
-- `#ff0000` hex
-- `#fff` shorthand hex, `#` is optional
-- `255, 0, 0` comma-separated rgb values
+Specified classes are expanded with colors in HSL functional notation, or HSLA wherever alpha is specified.
 
-These color models can also be used:
-
-- HSL
-- HSB
-- HSV
-- Lab
-- RGB
-
-…with a verbose object:
-
-```yaml
-hue: 0
-saturation: 100%
-lightness: 50%
+```css
+.red-color { color: hsl(0, 100%, 50%) }
+.bg-red-color { background-color: hsl(0, 100%, 50%) }
+.b--red-color { border-color: hsla(0, 100%, 50%, 0.5) }
+.blue-color { color: hsl(240, 100%, 50%) }
+.bg-blue-color { background-color: hsl(240, 100%, 50%) }
+.b--blue-color { border-color: hsla(240, 100%, 50%, 0.5) }
 ```
 
-…or a terse object:
+### JSON
 
-```yaml
-h: 0
-s: 100%
-l: 50%
+JSON property names are camelCased and colors are output in hex notation for broader compatibility. rgba values are used whenever alpha is specified.
+
+```json
+{
+  "redColor": "#f00000",
+  "redBg": "#f00000",
+  "redBorder": "rgba(240, 0, 0, 0.5)",
+  "blueColor": "#0000ff",
+  "blueBg": "#0000ff",
+  "blueBorder": "rgba(0, 0, 255, 0.5)"
+}
 ```
-
-Colors are parsed and converted with the powers of [chroma.js][]
 
 Contribute
 ----------
