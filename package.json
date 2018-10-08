@@ -15,6 +15,9 @@
     "func": "lib/func.cli.js"
   },
   "scripts": {
+    "prerelease": "npm run build",
+    "release": "npm version",
+    "postrelease": "npm publish && git push && git push --tags",
     "build": "babel -d lib/ src/ --ignore 'src/*.test.js'",
     "preversion": "npm run build",
     "test": "jest"
