@@ -80,11 +80,11 @@ function expandClasses({ classes = {}, colors = {} }) {
     if (!colorValue) return output;
 
     const styles = `${property}: ${colorValue.replace(/,/g, ', ')}`;
-    const hasHoverState = value.includes('hover');
+    const hasInteractState = value.includes('focus') || value.includes('hover');
 
     return [
       ...output,
-      !hasHoverState && `.${className} { ${styles} }`,
+      !hasInteractState && `.${className} { ${styles} }`,
       ...states.map(pseudoClassName => `.${className}${pseudoClassName} { ${styles} }`),
     ].filter(Boolean);
   }, []).join('\n');

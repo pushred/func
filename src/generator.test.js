@@ -49,15 +49,18 @@ function testExpandClasses() {
     expect(output).toEqual(expect.stringContaining('.button-border:link { border-color'));
   });
 
-  test('hover pseudo-classes do not apply property to simple base selector', () => {
+  test('property is not applied to base selector when interactive pseudo-classes are specified', () => {
     const classes = {
       'button': 'white :link',
+      'button-focus': 'blue :focus',
       'button-hover': 'blue :hover',
     };
 
     const output = expandClasses({ classes, colors });
     expect(output).toEqual(expect.stringContaining('.button:link { color'));
+    expect(output).toEqual(expect.stringContaining('.button-focus:focus { color'));
     expect(output).toEqual(expect.stringContaining('.button-hover:hover { color'));
+    expect(output).not.toEqual(expect.stringContaining('.button-focus { color'));
     expect(output).not.toEqual(expect.stringContaining('.button-hover { color'));
   });
 
