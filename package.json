@@ -1,41 +1,8 @@
 {
-  "name": "func-css",
-  "version": "0.3.0",
-  "description": "Express a design system with configuration, get your classes for free",
-  "author": "Eric Lanehart <eric@pushred.co> (http://pushred.co)",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/pushred/func.git"
-  },
-  "files": [
-    "lib"
-  ],
-  "license": "ISC",
-  "bin": {
-    "func": "lib/func.cli.js"
-  },
+  "name": "func",
+  "private": true,
   "scripts": {
-    "prerelease": "npm run build",
-    "release": "npm version",
-    "postrelease": "npm publish && git push && git push --tags",
-    "build": "babel -d lib/ src/ --ignore 'src/*.test.js'",
     "test": "jest"
-  },
-  "babel": {
-    "presets": [
-      [
-        "env",
-        {
-          "targets": {
-            "node": "6"
-          }
-        }
-      ],
-      "stage-2"
-    ]
-  },
-  "engines": {
-    "node": ">=6"
   },
   "devDependencies": {
     "babel": "^6.23.0",
@@ -43,18 +10,7 @@
     "babel-preset-env": "^1.7.0",
     "babel-preset-stage-2": "^6.24.1",
     "jest": "^23.0.1",
-    "js-yaml": "^3.11.0"
-  },
-  "dependencies": {
-    "chalk": "^2.4.1",
-    "chroma-js": "^1.4.0",
-    "cosmiconfig": "^5.0.5",
-    "lodash.camelcase": "^4.3.0",
-    "lodash.isplainobject": "^4.0.6",
-    "lodash.kebabcase": "^4.1.1",
-    "meow": "^5.0.0"
-  },
-  "optionalDependencies": {
-    "chokidar": "^2.0.4"
+    "js-yaml": "^3.11.0",
+    "lerna": "^3.4.3"
   }
 }
