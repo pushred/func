@@ -1,0 +1,28 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Cli returns loaded config files 1`] = `
+Object {
+  "classes": Object {
+    "button": "blue",
+    "error": "red",
+  },
+  "colors": Object {
+    "blue": Object {
+      "hue": 240,
+      "lightness": "50%",
+      "saturation": "100%",
+    },
+    "red": Object {
+      "hue": 0,
+      "lightness": "50%",
+      "saturation": "100%",
+    },
+  },
+  "func": Object {
+    "files": Object {
+      "classes": "classes.yml",
+      "colors": "colors.yml",
+    },
+  },
+}
+`;

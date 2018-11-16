@@ -1,3 +1,5 @@
+const CONFIG_NAME = 'func';
+
 const DEFAULTS = {
   configFilenames: [
     'package.json',
@@ -14,5 +16,6 @@ const DEFAULTS = {
 };
 
 module.exports = {
-  DEFAULTS
+  CONFIG_NAME,
+  DEFAULTS,
 };

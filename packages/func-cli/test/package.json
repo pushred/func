@@ -1,0 +1,8 @@
+{
+  "func": {
+    "files": {
+      "classes": "classes.yml",
+      "colors": "colors.yml"
+    }
+  }
+}

@@ -1,7 +1,7 @@
 {
-  "name": "func-css",
-  "description": "Express a design system with configuration, get your classes for free",
-  "version": "0.3.0",
+  "name": "func-cli",
+  "description": "Shared code for func* CLIs",
+  "version": "0.0.1",
   "author": "Eric Lanehart <eric@pushred.co> (http://pushred.co)",
   "license": "ISC",
   "repository": {
@@ -11,20 +11,19 @@
   "files": [
     "lib"
   ],
+  "main": "index.js",
   "scripts": {
     "build": "babel -d lib/ src/ --ignore 'src/*.test.js'"
-  },
-  "bin": {
-    "func": "lib/func-css.cli.js"
   },
   "engines": {
     "node": ">=6"
   },
   "dependencies": {
-    "chroma-js": "^1.4.0",
-    "func-cli": "^0.0.1",
-    "lodash.camelcase": "^4.3.0",
-    "lodash.isplainobject": "^4.0.6",
-    "lodash.kebabcase": "^4.1.1"
+    "chalk": "^2.4.1",
+    "cosmiconfig": "^5.0.5",
+    "meow": "^5.0.0"
+  },
+  "optionalDependencies": {
+    "chokidar": "^2.0.4"
   }
 }
