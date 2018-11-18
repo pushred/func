@@ -11,14 +11,11 @@
   "files": [
     "lib"
   ],
-  "scripts": {
-    "build": "babel -d lib/ src/ --ignore 'src/*.test.js'"
-  },
   "bin": {
-    "func": "lib/func-css.cli.js"
+    "func": "./func-css.cli.js"
   },
   "engines": {
-    "node": ">=6"
+    "node": ">=8.12.0"
   },
   "dependencies": {
     "chroma-js": "^1.4.0",

@@ -10,17 +10,14 @@
   "files": [
     "lib"
   ],
-  "scripts": {
-    "build": "babel -d lib/ src/ --ignore 'src/*.test.js'",
-    "postbuild": "chmod +x ./lib/func-index.cli.js"
-  },
   "bin": {
-    "func-index": "lib/func-index.cli.js"
+    "func-index": "./func-index.cli.js"
   },
   "engines": {
-    "node": ">=6"
+    "node": ">=8.12.0"
   },
   "dependencies": {
+    "func-cli": "^0.0.1",
     "postcss": "^7.0.5",
     "postcss-import": "^12.0.0"
   }

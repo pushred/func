@@ -1,5 +1,5 @@
-import chroma from 'chroma-js';
-import { parse } from './colors';
+const chroma = require('chroma-js');
+const { parse } = require('./colors');
 
 function parseTests() {
   test('hex values', () => {

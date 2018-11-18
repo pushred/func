@@ -1,7 +1,4 @@
-lib
 node_modules
-packages/func-cli/lib
-packages/func-css/lib
 test/func.css
 test/func.json
 test/package-lock.json

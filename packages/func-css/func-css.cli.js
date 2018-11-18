@@ -5,8 +5,8 @@ const { writeFileSync } = require('fs');
 
 const { Cli, log, Watcher } = require('func-cli');
 const { DEFAULTS } = require('func-cli/lib/consts');
-const { parse } = require('./colors');
-const { expandClasses, generateClasses, generateProps } = require('./generator');
+const { parse } = require('./lib/colors');
+const { expandClasses, generateClasses, generateProps } = require('./lib/generator');
 
 const HELP = `
   Usage

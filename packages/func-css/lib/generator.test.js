@@ -1,5 +1,5 @@
-import { expandClasses, generateClasses, generateProps } from './generator';
-import { parse } from './colors';
+const { expandClasses, generateClasses, generateProps } = require('./generator');
+const { parse } = require('./colors');
 
 function testExpandClasses() {
   const colors = {

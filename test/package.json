@@ -6,7 +6,6 @@
     }
   },
   "scripts": {
-    "prestart": "cd .. && npm run build",
     "start": "func",
     "poststart": "func-index ./func.css"
   },

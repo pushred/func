@@ -1,5 +1,5 @@
-import chroma from 'chroma-js';
-import isPlainObject from 'lodash.isplainobject';
+const chroma = require('chroma-js');
+const isPlainObject = require('lodash.isplainobject');
 
 function parse(colors = {}) {
   return Object.keys(colors).reduce((output, colorKey) => {
