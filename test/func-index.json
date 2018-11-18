@@ -1,0 +1,20 @@
+[
+  {
+    "selector": ".error",
+    "props": [
+      {
+        "property": "color",
+        "value": "hsl(0, 100%, 50%)"
+      }
+    ]
+  },
+  {
+    "selector": ".button",
+    "props": [
+      {
+        "property": "color",
+        "value": "hsl(240, 100%, 50%)"
+      }
+    ]
+  }
+]

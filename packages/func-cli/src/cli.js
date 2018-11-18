@@ -1,3 +1,4 @@
+const { writeFileSync } = require('fs');
 const { basename, dirname, resolve } = require('path');
 
 const cosmiconfig = require('cosmiconfig');
@@ -10,6 +11,31 @@ const {
   ERR_INVALID_CONFIG_ARG,
   ERR_NO_CONFIG
 } = require('./errors');
+
+/**
+ * getBasePath
+ * Get absolute path to target directory for stylesheets; default for other files
+ */
+
+function getBasePath(config) {
+  return (config.output && dirname(config.output)) || process.cwd();
+}
+
+/**
+ * saveJson
+ *
+ * @param {Object|array} data - suitable for JSON serialization
+ * @param {string} outputPath - custom path/filename
+ *
+ * @emits func-index.json file
+ */
+
+function saveJson(config, { data, name, outputPath }) {
+  const json = JSON.stringify(data, null, 2);
+  const jsonPath = outputPath || resolve(config.basePath, name);
+  writeFileSync(jsonPath, json);
+  log.save('JSON saved to', jsonPath);
+}
 
 /**
  * searchConfigs
@@ -68,6 +94,7 @@ function loadConfigs({ cli, explorer, searchResults }) {
     ),
   ]).then(result => ({
     config: {
+      basePath: getBasePath(result[0]),
       func: {
         ...result[0],
         ...cli.flags,
@@ -127,7 +154,8 @@ function Cli(help, options = {}) {
     return {
       cli,
       config,
-      configFiles
+      configFiles,
+      saveJson: saveJson.bind(null, config),
     };
   });
 }

@@ -1,0 +1,27 @@
+{
+  "name": "func-index",
+  "version": "0.0.1",
+  "author": "Eric Lanehart <eric@pushred.co> (http://pushred.co)",
+  "license": "ISC",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/pushred/func.git"
+  },
+  "files": [
+    "lib"
+  ],
+  "scripts": {
+    "build": "babel -d lib/ src/ --ignore 'src/*.test.js'",
+    "postbuild": "chmod +x ./lib/func-index.cli.js"
+  },
+  "bin": {
+    "func-index": "lib/func-index.cli.js"
+  },
+  "engines": {
+    "node": ">=6"
+  },
+  "dependencies": {
+    "postcss": "^7.0.5",
+    "postcss-import": "^12.0.0"
+  }
+}
