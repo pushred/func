@@ -6,11 +6,19 @@
     }
   },
   "scripts": {
-    "start": "func",
-    "poststart": "func-index ./func.css"
+    "build:styles": "func",
+    "build:styles:watch": "func --watch",
+    "build:index": "func-index ./func.css",
+    "preview": "func-preview",
+    "start": "run-s build:styles build:index preview",
+    "watch": "run-p preview build:styles:watch"
   },
   "dependencies": {
     "func-css": "../packages/func-css",
-    "func-index": "../packages/func-index"
+    "func-index": "../packages/func-index",
+    "func-preview": "../packages/func-preview"
+  },
+  "devDependencies": {
+    "npm-run-all": "^4.1.3"
   }
 }

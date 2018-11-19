@@ -72,18 +72,14 @@ function updateOutput(config) {
   generate(config)
     .then(output => {
       const stylesheet = output[0];
-      const stylesheetPath = config.func.output || DEFAULTS.output;
-
-      writeFileSync(stylesheetPath, stylesheet);
-      log.save('stylesheet saved to', stylesheetPath);
-
       const json = output[1];
-      const targetBase = dirname(stylesheetPath);
-      const jsonPath = config.func.jsonOutput || join(targetBase, DEFAULTS.jsonOutput);
+
+      writeFileSync(config.paths.stylesheet, stylesheet);
+      log.save('stylesheet saved to', config.paths.stylesheet);
 
       if (!json) return;
-      writeFileSync(jsonPath, json);
-      log.save('JSON saved to', jsonPath);
+      writeFileSync(config.paths.json, json);
+      log.save('JSON saved to', config.paths.json);
     })
     .catch(log.error);
 }

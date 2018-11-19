@@ -83,6 +83,8 @@ function loadConfigs({ cli, explorer, searchResults }) {
 
   const { classes, colors } = config.files;
   const configDir = dirname(searchResults.filepath);
+  const jsonPath = config.jsonOutput || DEFAULTS.jsonOutput;
+  const stylesheetPath = config.output || DEFAULTS.output;
 
   return Promise.all([
     config,
@@ -92,22 +94,30 @@ function loadConfigs({ cli, explorer, searchResults }) {
     explorer.load(
       resolve(configDir, colors)
     ),
-  ]).then(result => ({
-    config: {
-      basePath: getBasePath(result[0]),
-      func: {
-        ...result[0],
-        ...cli.flags,
+  ]).then(result => {
+    const basePath = getBasePath(result[0]);
+    return ({
+      config: {
+        basePath,
+        paths: {
+          json: resolve(basePath, jsonPath),
+          indexJson: resolve(basePath, DEFAULTS.indexJsonOutput),
+          stylesheet: resolve(basePath, stylesheetPath),
+        },
+        func: {
+          ...result[0],
+          ...cli.flags,
+        },
+        classes: result[1].config,
+        colors: result[2].config,
       },
-      classes: result[1].config,
-      colors: result[2].config,
-    },
-    configFiles: [
-      result[1].filepath,
-      result[2].filepath,
-    ],
-    searchResults,
-  }));
+      configFiles: [
+        result[1].filepath,
+        result[2].filepath,
+      ],
+      searchResults,
+    });
+  });
 }
 
 /**
@@ -146,6 +156,8 @@ function Cli(help, options = {}) {
     explorer,
     searchResults,
   })).then(({ config, configFiles, searchResults }) => {
+    const cwd = process.cwd();
+
     cli.refreshConfigs = () => {
       explorer.clearLoadCache();
       return loadConfigs({ cli, explorer, searchResults });

@@ -1,0 +1,38 @@
+{
+  "name": "func-preview",
+  "version": "0.0.1",
+  "author": "Eric Lanehart <eric@pushred.co> (http://pushred.co)",
+  "license": "ISC",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/pushred/func.git"
+  },
+  "files": [
+    "lib"
+  ],
+  "scripts": {
+    "build": "babel -d lib/ src/ --ignore 'src/*.test.js'",
+    "postbuild": "chmod +x ./lib/func-preview.cli.js"
+  },
+  "bin": {
+    "func-preview": "./func-preview.cli.js"
+  },
+  "engines": {
+    "node": ">=8.12.0"
+  },
+  "dependencies": {
+    "func-cli": "^0.0.1",
+    "live-server": "^1.2.0",
+    "postcss": "^7.0.5",
+    "postcss-import": "^12.0.0",
+    "rollup": "^0.67.3",
+    "rollup-plugin-alias": "^1.4.0",
+    "rollup-plugin-json": "^3.1.0",
+    "rollup-plugin-svelte": "^4.3.2",
+    "svelte": "^2.15.3",
+    "tmp": "0.0.33"
+  },
+  "optionalDependencies": {
+    "chokidar": "^2.0.4"
+  }
+}

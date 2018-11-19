@@ -9,5 +9,6 @@
     "js-yaml": "^3.11.0",
     "lerna": "^3.4.3"
   },
-  "dependencies": {}
+  "dependencies": {},
+  "optionalDependencies": {}
 }
