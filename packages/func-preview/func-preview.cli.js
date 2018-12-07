@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
 const { copyFileSync } = require('fs');
-const { join } = require('path');
+const { basename, join } = require('path');
 
 const server = require('live-server');
 const tmp = require('tmp');
@@ -32,7 +32,6 @@ function initialBundle({ config }) {
   debug('tmp directory created:', tmpDirPath);
 
   copyFileSync(join(__dirname, 'lib', 'index.html'), join(tmpDirPath, 'index.html'));
-  copyFileSync(config.paths.stylesheet, join(tmpDirPath, 'func.css'));
 
   const rollupOptions = {
     input: join(__dirname, 'lib', 'preview.js'),
@@ -46,31 +45,43 @@ function initialBundle({ config }) {
         'func-index': config.paths.indexJson,
       }),
       jsonPlugin(),
-      sveltePlugin(),
+      sveltePlugin({ dev: true }),
     ],
   };
 
   return Promise.resolve(rollup.rollup(rollupOptions))
     .then(bundle => bundle.write(rollupOptions.output))
-    .then(() => startServer(tmpDirPath))
-    .then(() => (rollupOptions));
+    .then(() => startServer({ tmpDirPath, outputPath: basename(config.paths.stylesheet) }))
+    .then(() => ({ config, rollupOptions }))
+    .catch(console.error);
 }
 
-function startServer(tmpDirPath) {
+function startServer({ outputPath, tmpDirPath }) {
   server.start({
     root: tmpDirPath,
     open: false,
+    mount: [
+      ['/output', outputPath],
+    ],
   });
 
   return Promise.resolve();
 }
 
-function watch(rollupOptions) {
+function watch({
+  config = {
+    paths: {},
+  },
+  rollupOptions,
+} = {}) {
   const watcher = rollup.watch({
     ...rollupOptions,
     watch: {
       // chokidar: true,
-      include: join(__dirname, './lib/**'),
+      include: [
+        ...Object.values(config.paths),
+        join(__dirname, './lib/**'),
+      ],
     },
   });
 
