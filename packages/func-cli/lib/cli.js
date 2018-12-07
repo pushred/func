@@ -1,4 +1,3 @@
-const { writeFileSync } = require('fs');
 const { basename, dirname, resolve } = require('path');
 
 const cosmiconfig = require('cosmiconfig');
@@ -19,22 +18,6 @@ const {
 
 function getBasePath(config) {
   return (config.output && dirname(config.output)) || process.cwd();
-}
-
-/**
- * saveJson
- *
- * @param {Object|array} data - suitable for JSON serialization
- * @param {string} outputPath - custom path/filename
- *
- * @emits func-index.json file
- */
-
-function saveJson(config, { data, name, outputPath }) {
-  const json = JSON.stringify(data, null, 2);
-  const jsonPath = outputPath || resolve(config.basePath, name);
-  writeFileSync(jsonPath, json);
-  log.save('JSON saved to', jsonPath);
 }
 
 /**
@@ -167,7 +150,6 @@ function Cli(help, options = {}) {
       cli,
       config,
       configFiles,
-      saveJson: saveJson.bind(null, config),
     };
   });
 }

@@ -18,7 +18,7 @@ const HELP = `
     -o, --output    Filepath for generated stylesheet
     --jsonOutput    Filepath for generated JSON
     --config        Custom config filename, defaults to (funcrc|func.config).(json|yaml|yml)
-    --watch         Watch config files and regenerate on changes
+    --watch         Watch config files and regenerate on changes, specify extra space-separated paths to watch
 `;
 
 const FLAGS = {
@@ -31,6 +31,10 @@ const FLAGS = {
   },
   jsonOutput: {
     type: 'string',
+  },
+  watch: {
+    type: 'string',
+    default: '',
   },
 };
 
@@ -92,7 +96,7 @@ function updateOutput(config) {
  * @fires updateOutput
  */
 
-function watch(configFiles = [], cli) {
+function watch({ cli, configFiles = [] }) {
   Watcher(configFiles)
     .on('change', (path) => {
       log.info(`${basename(path)} changed, regenerating…`);
@@ -101,9 +105,9 @@ function watch(configFiles = [], cli) {
 }
 
 Cli(HELP, FLAGS)
-  .then(({ cli, config, configFiles }) => {
-    return cli.flags.watch
-      ? watch(configFiles, cli)
-      : updateOutput(config);
-  })
+  .then(({ cli, config, configFiles }) => (
+    cli.flags.watch
+      ? watch({ cli, configFiles })
+      : updateOutput(config)
+  ))
   .catch(log.error);

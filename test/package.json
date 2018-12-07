@@ -7,11 +7,12 @@
   },
   "scripts": {
     "build:styles": "func",
-    "build:styles:watch": "func --watch",
+    "build:styles:watch": "func --watch ./*",
     "build:index": "func-index ./func.css",
+    "build:index:watch": "func-index ./func.css --watch",
     "preview": "func-preview",
     "start": "run-s build:styles build:index preview",
-    "watch": "run-p preview build:styles:watch"
+    "watch": "run-p preview build:index:watch build:styles:watch"
   },
   "dependencies": {
     "func-css": "../packages/func-css",
