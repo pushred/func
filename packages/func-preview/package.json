@@ -21,13 +21,16 @@
     "node": ">=8.12.0"
   },
   "dependencies": {
+    "chroma-js": "^1.4.1",
     "func-cli": "^0.0.1",
     "live-server": "^1.2.0",
     "postcss": "^7.0.5",
     "postcss-import": "^12.0.0",
     "rollup": "^0.67.3",
     "rollup-plugin-alias": "^1.4.0",
+    "rollup-plugin-commonjs": "^9.2.0",
     "rollup-plugin-json": "^3.1.0",
+    "rollup-plugin-node-resolve": "^3.4.0",
     "rollup-plugin-svelte": "^4.3.2",
     "svelte": "^2.15.3",
     "tmp": "0.0.33"

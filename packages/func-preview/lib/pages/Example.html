@@ -1,0 +1,23 @@
+<script>
+  import BackgroundColor from '../components/BackgroundColor.html';
+  import Color from '../components/Color.html';
+  import Generic from '../components/Generic.html';
+
+  export default {
+    components: {
+      BackgroundColor,
+      Color,
+      Generic,
+    }
+  };
+</script>
+
+{#each index as style}
+  {#if style.props[0].property === 'color'}
+    <Color style={style} />
+  {:elseif style.props[0].property === 'background-color'}
+    <BackgroundColor style={style} />
+  {:else}
+    <Generic style={style} />
+  {/if}
+{/each}

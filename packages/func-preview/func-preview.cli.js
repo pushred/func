@@ -8,7 +8,9 @@ const tmp = require('tmp');
 
 const rollup = require('rollup');
 const aliasPlugin = require('rollup-plugin-alias');
+const cjsPlugin = require('rollup-plugin-commonjs');
 const jsonPlugin = require('rollup-plugin-json');
+const resolvePlugin = require('rollup-plugin-node-resolve');
 const sveltePlugin = require('rollup-plugin-svelte');
 
 const { Cli, debug, log } = require('func-cli');
@@ -44,7 +46,9 @@ function initialBundle({ config }) {
         resolve: ['.js', '.json'],
         'func-index': config.paths.indexJson,
       }),
+      cjsPlugin(),
       jsonPlugin(),
+      resolvePlugin(),
       sveltePlugin({ dev: true }),
     ],
   };

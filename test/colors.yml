@@ -9,3 +9,9 @@ blue:
   hue: 240
   saturation: 100%
   lightness: 50%
+
+green:
+
+  hue: 120
+  saturation: 50%
+  lightness: 30%

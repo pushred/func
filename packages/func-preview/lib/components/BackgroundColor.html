@@ -1,0 +1,31 @@
+<p class={`swatch ${style.className}`} style={getTextColor(style.props[0].value)}>
+  {style.selector}
+</p>
+
+<style>
+  .swatch {
+    border-radius: 0.25em;
+    padding: 0.5em;
+  }
+</style>
+
+<script>
+  import chroma from 'chroma-js';
+
+  function getTextColor(backgroundColor) {
+    const whiteContrast = chroma.contrast('white', backgroundColor);
+    const blackContrast = chroma.contrast('black', backgroundColor);
+
+    let textColor = whiteContrast > blackContrast
+      ? 'white'
+      : 'black';
+
+    return `color: ${textColor}`;
+  }
+
+  export default {
+    helpers: {
+      getTextColor,
+    },
+  }
+</script>

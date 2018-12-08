@@ -13,6 +13,15 @@
     "props": [
       {
         "property": "color",
+        "value": "hsl(120, 50.33%, 30%)"
+      }
+    ]
+  },
+  {
+    "selector": ".bg-button",
+    "props": [
+      {
+        "property": "background-color",
         "value": "hsl(240, 100%, 50%)"
       }
     ]
