@@ -97,7 +97,7 @@ function updateIndex({ cli, config }) {
       data,
       name: DEFAULTS.indexJsonOutput,
       outputPath: cli.flags.output,
-    }))
+    }));
 }
 
 /**
@@ -118,7 +118,9 @@ function watch({ cli }) {
   Watcher(cssPath)
     .on('change', (path) => {
       log.info(`${basename(path)} changed, updating index…`);
-      cli.refreshConfigs().then(({ config }) => updateIndex({ cli, config }));
+      cli.refreshConfigs()
+        .then(({ config }) => updateIndex({ cli, config }))
+        .catch(log.error);
     });
 }
 
@@ -128,4 +130,6 @@ Cli(HELP, FLAGS)
       ? watch({ cli, config })
       : updateIndex({ cli, config })
   ))
-  .catch(log.error);
+  .catch(err => {
+    throw new Error(err);
+  });

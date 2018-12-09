@@ -84,8 +84,7 @@ function updateOutput(config) {
       if (!json) return;
       writeFileSync(config.paths.json, json);
       log.save('JSON saved to', config.paths.json);
-    })
-    .catch(log.error);
+    });
 }
 
 /**
@@ -100,7 +99,9 @@ function watch({ cli, configFiles = [] }) {
   Watcher(configFiles)
     .on('change', (path) => {
       log.info(`${basename(path)} changed, regenerating…`);
-      cli.refreshConfigs().then(({ config }) => updateOutput(config));
+      cli.refreshConfigs()
+        .then(({ config }) => updateOutput(config))
+        .catch(log.error);
     });
 }
 
@@ -110,4 +111,6 @@ Cli(HELP, FLAGS)
       ? watch({ cli, configFiles })
       : updateOutput(config)
   ))
-  .catch(log.error);
+  .catch(err => {
+    throw new Error(err);
+  });
