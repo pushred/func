@@ -13,8 +13,15 @@
   import chroma from 'chroma-js';
 
   function getTextColor(backgroundColor) {
-    const whiteContrast = chroma.contrast('white', backgroundColor);
-    const blackContrast = chroma.contrast('black', backgroundColor);
+    let whiteContrast = 0;
+    let blackContrast = 0;
+
+    try {
+      whiteContrast = chroma.contrast('white', backgroundColor);
+      blackContrast = chroma.contrast('black', backgroundColor);
+    } catch (err) {
+      console.error(err);
+    }
 
     let textColor = whiteContrast > blackContrast
       ? 'white'
