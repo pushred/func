@@ -2,7 +2,8 @@
   "name": "func",
   "private": true,
   "scripts": {
-    "test": "jest"
+    "test": "jest",
+    "test:debug": "node --inspect-brk node_modules/.bin/jest --runInBand --no-cache"
   },
   "devDependencies": {
     "jest": "^23.0.1",
