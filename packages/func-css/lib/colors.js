@@ -58,6 +58,9 @@ function parse(colors = {}) {
         : config.color[key]
     ));
 
+    const hasHue = colorModelName === 'hsl' || colorModelName === 'hsv';
+    if (hasHue && color[0] === 0) throw new Error('`0` is not a valid hue');
+
     const baseColor = chroma.call(null, color, colorModelName);
 
     return {

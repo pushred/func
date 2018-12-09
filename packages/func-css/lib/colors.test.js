@@ -54,7 +54,7 @@ function parseTests() {
   test('percentages are preserved', () => {
     const palette = {
       red: {
-        hue: 0,
+        hue: 360,
         saturation: 0.65,
         lightness: 0.5,
       },
@@ -105,10 +105,24 @@ function parseTests() {
     expect(hslBlue[2]).toBeCloseTo(0.25);
   });
 
-  test('shades', () => {
+  test('invalid hues', () => {
     const palette = {
       gray: {
         hue: 0,
+        saturation: '0%',
+        lightness: '0%',
+      },
+    };
+
+    expect(() => {
+      parse(palette)
+    }).toThrow();
+  });
+
+  test('shades', () => {
+    const palette = {
+      gray: {
+        hue: 360,
         saturation: 0,
         brightness: 0,
         shades: 3,
@@ -129,7 +143,7 @@ function parseTests() {
   test('tints', () => {
     const palette = {
       gray: {
-        hue: 0,
+        hue: 360,
         saturation: 0,
         brightness: 0,
         tints: 3,
