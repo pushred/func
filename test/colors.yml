@@ -10,6 +10,8 @@ blue:
   saturation: 100%
   lightness: 50%
 
+  tints: 5
+
 green:
 
   hue: 120

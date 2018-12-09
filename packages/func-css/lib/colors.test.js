@@ -1,5 +1,22 @@
 const chroma = require('chroma-js');
-const { parse } = require('./colors');
+const { mix, parse } = require('./colors');
+
+function mixTests() {
+  const palette = parse({ red: '#ff0000' });
+  const mixtures = mix({ color1: palette.red, color2: chroma('white'), stops: 3  });
+
+  test('mix stops', () => {
+    expect(mixtures).toHaveLength(3);
+  });
+
+  test('steps are equidistant', () => {
+    const lightness = mixtures.map(color => color.hsl()[2]);
+    const step1 = lightness[0] - lightness[1];
+    const step2 = lightness[1] - lightness[2];
+
+    expect(step1).toBeCloseTo(step2);
+  });
+}
 
 function parseTests() {
   test('hex values', () => {
@@ -87,8 +104,51 @@ function parseTests() {
     expect(hslBlue[1]).toBeCloseTo(1);
     expect(hslBlue[2]).toBeCloseTo(0.25);
   });
+
+  test('shades', () => {
+    const palette = {
+      gray: {
+        hue: 0,
+        saturation: 0,
+        brightness: 0,
+        shades: 3,
+      },
+    };
+
+    const output = parse(palette);
+
+    expect(Object.keys(output)).toEqual(
+      expect.arrayContaining(['gray', 'dark-gray', 'darker-gray'])
+    );
+
+    Object.values(output).forEach(val => {
+      expect(val.constructor.name).toEqual('Color');
+    });
+  });
+
+  test('tints', () => {
+    const palette = {
+      gray: {
+        hue: 0,
+        saturation: 0,
+        brightness: 0,
+        tints: 3,
+      },
+    };
+
+    const output = parse(palette);
+
+    expect(Object.keys(output)).toEqual(
+      expect.arrayContaining(['gray', 'light-gray', 'lighter-gray'])
+    );
+
+    Object.values(output).forEach(val => {
+      expect(val.constructor.name).toEqual('Color');
+    });
+  });
 }
 
 describe('colors', () => {
   describe('parses and normalizes', parseTests);
+  describe('mixtures', mixTests);
 });
