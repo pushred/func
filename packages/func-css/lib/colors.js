@@ -53,7 +53,7 @@ function parse(colors = {}) {
     if (colorModelName === 'hsb') colorModelName = 'hsv';
 
     const color = Object.keys(config.color).map(key => (
-      ['s', 'b', 'l', 'v'].includes(key[0]) && parseInt(config.color[key], 10) > 1
+      ['s', 'b', 'l', 'v'].includes(key[0]) && parseInt(config.color[key], 10) >= 0
         ? parseInt(config.color[key], 10) / 100
         : config.color[key]
     ));
