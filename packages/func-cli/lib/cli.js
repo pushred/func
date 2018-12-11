@@ -68,6 +68,7 @@ function loadConfigs({ cli, explorer, searchResults }) {
   const configDir = dirname(searchResults.filepath);
   const jsonPath = config.jsonOutput || DEFAULTS.jsonOutput;
   const stylesheetPath = config.output || DEFAULTS.output;
+  const tokensPath = config.tokensOutput || DEFAULTS.tokensOutput;
 
   return Promise.all([
     config,
@@ -86,6 +87,7 @@ function loadConfigs({ cli, explorer, searchResults }) {
           json: resolve(basePath, jsonPath),
           indexJson: resolve(basePath, DEFAULTS.indexJsonOutput),
           stylesheet: resolve(basePath, stylesheetPath),
+          tokens: resolve(basePath, tokensPath),
         },
         func: {
           ...result[0],

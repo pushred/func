@@ -91,6 +91,15 @@ function expandClasses({ classes = {}, colors = {} }) {
 }
 
 /**
+ * expandPalette
+ * Expands base color palette with mixtures
+ */
+
+function expandPalette({ colors = {} }) {
+  return parse(colors);
+}
+
+/**
  * generateClasses
  * Creates a named color class for each configured property
  */
@@ -164,6 +173,7 @@ function generateProps({ classes = {}, colors = {} }) {
 
 module.exports = {
   expandClasses,
+  expandPalette,
   generateClasses,
   generateProps,
 };

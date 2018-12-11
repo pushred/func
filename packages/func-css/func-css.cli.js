@@ -6,7 +6,7 @@ const { writeFileSync } = require('fs');
 const { Cli, log, Watcher } = require('func-cli');
 const { DEFAULTS } = require('func-cli/lib/consts');
 const { parse } = require('./lib/colors');
-const { expandClasses, generateClasses, generateProps } = require('./lib/generator');
+const { expandClasses, expandPalette, generateClasses, generateProps } = require('./lib/generator');
 
 const HELP = `
   Usage
@@ -17,6 +17,7 @@ const HELP = `
   Options
     -o, --output    Filepath for generated stylesheet
     --jsonOutput    Filepath for generated JSON
+    --tokensOutput    Filepath for generated design tokens
     --config        Custom config filename, defaults to (funcrc|func.config).(json|yaml|yml)
     --watch         Watch config files and regenerate on changes, specify extra space-separated paths to watch
 `;
@@ -30,6 +31,9 @@ const FLAGS = {
     alias: 'o',
   },
   jsonOutput: {
+    type: 'string',
+  },
+  tokensOutput: {
     type: 'string',
   },
   watch: {
@@ -48,6 +52,7 @@ function generate(config) {
   return Promise.all([
     generateStylesheet(config),
     generateJson(config),
+    generateTokens(config),
   ]);
 }
 
@@ -64,6 +69,17 @@ function generateStylesheet({ func, classes, colors } = {}) {
   ].filter(Boolean).join(/\n/);
 }
 
+function generateTokens({ colors = {} } = {}) {
+  const palette = expandPalette({ colors });
+
+  const tokens = Object.keys(palette).reduce((tokens, colorName) => ({
+    ...tokens,
+    [colorName]: palette[colorName].hex(),
+  }), {});
+
+  return JSON.stringify(tokens, null, 2);
+}
+
 /**
  * updateOutput
  * generates and writes stylesheet and JSON output files from latest configuration
@@ -77,13 +93,20 @@ function updateOutput(config) {
     .then(output => {
       const stylesheet = output[0];
       const json = output[1];
+      const tokens = output[2];
 
       writeFileSync(config.paths.stylesheet, stylesheet);
       log.save('stylesheet saved to', config.paths.stylesheet);
 
-      if (!json) return;
-      writeFileSync(config.paths.json, json);
-      log.save('JSON saved to', config.paths.json);
+      if (json) {
+        writeFileSync(config.paths.json, json);
+        log.save('JSON saved to', config.paths.json);
+      }
+
+      if (tokens) {
+        writeFileSync(config.paths.tokens, tokens);
+        log.save('design tokens saved to', config.paths.tokens);
+      }
     });
 }
 

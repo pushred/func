@@ -14,6 +14,7 @@ const DEFAULTS = {
   output: 'func.css',
   jsonOutput: 'func.json',
   indexJsonOutput: 'func-index.json',
+  tokensOutput: 'func-tokens.json',
 };
 
 module.exports = {
