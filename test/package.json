@@ -12,6 +12,7 @@
     "build:index:watch": "func-index ./func.css --watch",
     "preview": "func-preview",
     "start": "run-s build:styles build:index preview",
+    "prewatch": "run-s build:styles build:index",
     "watch": "run-p preview build:index:watch build:styles:watch"
   },
   "dependencies": {
