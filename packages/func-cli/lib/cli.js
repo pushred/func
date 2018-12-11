@@ -79,15 +79,14 @@ function loadConfigs({ cli, explorer, searchResults }) {
       resolve(configDir, colors)
     ),
   ]).then(result => {
-    const basePath = getBasePath(result[0]);
     return ({
       config: {
-        basePath,
+        basePath: configDir,
         paths: {
-          json: resolve(basePath, jsonPath),
-          indexJson: resolve(basePath, DEFAULTS.indexJsonOutput),
-          stylesheet: resolve(basePath, stylesheetPath),
-          tokens: resolve(basePath, tokensPath),
+          json: resolve(configDir, jsonPath),
+          indexJson: resolve(configDir, DEFAULTS.indexJsonOutput),
+          stylesheet: resolve(configDir, stylesheetPath),
+          tokens: resolve(configDir, tokensPath),
         },
         func: {
           ...result[0],

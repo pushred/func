@@ -4,10 +4,10 @@ const Cli = require('./cli');
 const meow = require('meow');
 const logger = require('./logger');
 
-const CONFIG_PATH = resolve(__dirname, '../test');
+const CONFIG_PATH = resolve(__dirname, '../../../test');
 const HELP = 'help!';
 
-describe.only('Cli', () => {
+describe('Cli', () => {
   beforeEach(() => {
     process.argv = [];
   });
@@ -45,19 +45,22 @@ describe.only('Cli', () => {
 
   test('returns loaded config files', () => {
     return Cli(HELP, { searchFrom: CONFIG_PATH })
-      .then(({ config }) => expect(config).toMatchSnapshot());
+      .then(({ config }) => {
+        const jsonConfig = JSON.parse(
+          JSON.stringify(config)
+            .split(CONFIG_PATH)
+            .join('/var/tmp')
+        );
+
+        expect(jsonConfig).toMatchSnapshot()
+      });
   });
 
   test('returns cosmiconfig search results', () => {
-    const classesPath = resolve(__dirname, '../test/classes.yml');
-    const colorsPath = resolve(__dirname, '../test/colors.yml');
-
     return Cli(HELP, { searchFrom: CONFIG_PATH })
       .then(({ cli, configFiles }) => {
-        expect(configFiles).toEqual(expect.arrayContaining([
-          classesPath,
-          colorsPath,
-        ]));
+        expect(configFiles[0].includes('classes.yml'));
+        expect(configFiles[1].includes('colors.yml'));
       });
   });
 });

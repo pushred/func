@@ -2,8 +2,13 @@
 
 exports[`Cli returns loaded config files 1`] = `
 Object {
+  "basePath": "/var/tmp",
   "classes": Object {
-    "button": "blue",
+    "bg-button": "blue",
+    "bg-gray": "gray",
+    "bg-light-gray": "light-gray",
+    "bg-lighter-gray": "lighter-gray",
+    "button": "green",
     "error": "red",
   },
   "colors": Object {
@@ -12,8 +17,19 @@ Object {
       "lightness": "50%",
       "saturation": "100%",
     },
+    "gray": Object {
+      "hue": 180,
+      "lightness": "0%",
+      "saturation": "0%",
+      "tints": 3,
+    },
+    "green": Object {
+      "hue": 120,
+      "lightness": "30%",
+      "saturation": "50%",
+    },
     "red": Object {
-      "hue": 0,
+      "hue": 360,
       "lightness": "50%",
       "saturation": "100%",
     },
@@ -23,6 +39,12 @@ Object {
       "classes": "classes.yml",
       "colors": "colors.yml",
     },
+  },
+  "paths": Object {
+    "indexJson": "/var/tmp/func-index.json",
+    "json": "/var/tmp/func.json",
+    "stylesheet": "/var/tmp/func.css",
+    "tokens": "/var/tmp/func-tokens.json",
   },
 }
 `;
