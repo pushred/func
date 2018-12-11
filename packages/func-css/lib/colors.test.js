@@ -51,7 +51,25 @@ function parseTests() {
     expect(output.red.constructor.name).toEqual('Color');
   });
 
-  test('percentages are preserved', () => {
+  test('string percentages are converted', () => {
+    const palette = {
+      red: {
+        hue: 360,
+        saturation: '65%',
+        lightness: '50%',
+      },
+    };
+
+    const output = parse(palette);
+
+    const hslRed = output.red.hsl();
+
+    expect(hslRed[0]).toBeCloseTo(0);
+    expect(hslRed[1]).toBeCloseTo(0.65);
+    expect(hslRed[2]).toBeCloseTo(0.5);
+  });
+
+  test('decimal percentages are preserved', () => {
     const palette = {
       red: {
         hue: 360,

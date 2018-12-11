@@ -52,14 +52,25 @@ function parse(colors = {}) {
     let colorModelName = Object.keys(config.color).map(val => val[0]).join('');
     if (colorModelName === 'hsb') colorModelName = 'hsv';
 
-    const color = Object.keys(config.color).map(key => (
-      ['s', 'b', 'l', 'v'].includes(key[0]) && parseInt(config.color[key], 10) >= 0
-        ? parseInt(config.color[key], 10) / 100
-        : config.color[key]
-    ));
+    const color = Object.keys(config.color).map(key => {
+      const originalValue = config.color[key];
+      const isPctValue = ['s', 'b', 'l', 'v'].includes(key[0]);
+      if (!isPctValue) return originalValue;
+
+      const value = parseFloat(originalValue);
+
+      if (value === 0) return value;
+      if (value > 1) return value / 100;
+      return originalValue;
+    });
 
     const hasHue = colorModelName === 'hsl' || colorModelName === 'hsv';
-    if (hasHue && color[0] === 0) throw new Error('`0` is not a valid hue');
+    const isBlack = color[1] === 0 && color[2] === 0;
+    const isWhite = color[1] === 0 && color[2] === 1;
+
+    if (hasHue && color[0] === 0 && (isBlack || isWhite)) {
+      throw new Error('`0` is not a valid hue, pure black/white have none');
+    }
 
     const baseColor = chroma.call(null, color, colorModelName);
 
