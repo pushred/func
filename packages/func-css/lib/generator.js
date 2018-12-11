@@ -49,8 +49,6 @@ function getProperty({
  */
 
 function expandClasses({ classes = {}, colors = {} }) {
-  const chromaColors = parse(colors);
-
   return Object.keys(classes).reduce((output, className) => {
     const property = getProperty({ className });
 
@@ -70,7 +68,8 @@ function expandClasses({ classes = {}, colors = {} }) {
       });
 
     const colorKey = props[0];
-    const chromaColor = chromaColors[colorKey];
+    const chromaColor = colors[colorKey];
+
     const adjustedColor = adjusterFn && adjustColor(chromaColor, adjusterFn[0]);
 
     const colorValue = chromaColor
@@ -91,25 +90,14 @@ function expandClasses({ classes = {}, colors = {} }) {
 }
 
 /**
- * expandPalette
- * Expands base color palette with mixtures
- */
-
-function expandPalette({ colors = {} }) {
-  return parse(colors);
-}
-
-/**
  * generateClasses
  * Creates a named color class for each configured property
  */
 
 function generateClasses({ colors = {}, properties = {}, states = [] }) {
-  const chromaColors = parse(colors);
-
   return Object.keys(colors).reduce((output, colorKey) => {
     const colorName = kebabCase(colorKey);
-    const colorValue = chromaColors[colorKey];
+    const colorValue = colors[colorKey];
 
     return [
       ...output,
@@ -133,8 +121,6 @@ function generateClasses({ colors = {}, properties = {}, states = [] }) {
  */
 
 function generateProps({ classes = {}, colors = {} }) {
-  const chromaColors = parse(colors);
-
   const classProps = Object.keys(classes).reduce((output, className) => {
     const value = classes[className];
     const adjusterFn = /[a-z]*\(.*\)/.exec(value);
@@ -144,8 +130,8 @@ function generateProps({ classes = {}, colors = {} }) {
 
     const colorKey = props[0];
     const colorValue = adjusterFn
-      ? adjustColor(chromaColors[colorKey], adjusterFn[0])
-      : chromaColors[colorKey];
+      ? adjustColor(colors[colorKey], adjusterFn[0])
+      : colors[colorKey];
 
     if (!colorValue) return output;
 
@@ -158,10 +144,10 @@ function generateProps({ classes = {}, colors = {} }) {
   }, {});
 
   const colorProps = Object.keys(colors).reduce((output, colorName) => {
-    if (!chromaColors[colorName]) return output;
+    if (!colors[colorName]) return output;
     return {
       ...output,
-      [camelCase(colorName)]: chromaColors[colorName].hex()
+      [camelCase(colorName)]: colors[colorName].hex()
     };
   }, {});
 
@@ -173,7 +159,6 @@ function generateProps({ classes = {}, colors = {} }) {
 
 module.exports = {
   expandClasses,
-  expandPalette,
   generateClasses,
   generateProps,
 };

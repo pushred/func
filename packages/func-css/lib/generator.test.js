@@ -2,12 +2,12 @@ const { expandClasses, generateClasses, generateProps } = require('./generator')
 const { parse } = require('./colors');
 
 function testExpandClasses() {
-  const colors = {
+  const colors = parse({
     red: '#ff0000',
     gray: '#fafafa',
     white: '#fff',
     blue: '#0000ff',
-  };
+  });
 
   test('css keywords passthrough', () => {
     const classes = {
@@ -86,13 +86,6 @@ function testExpandClasses() {
   });
 
   test('snapshot', () => {
-    const colors = {
-      red: '#ff0000',
-      gray: '#fafafa',
-      white: '#fff',
-      blue: '#0000ff',
-    };
-
     const classes = {
       'button': 'white :link :visited :active *:link *:visited *:active',
       'button-bg': 'red &:link &:visited &:active',
@@ -106,10 +99,10 @@ function testExpandClasses() {
 }
 
 function testGenerateClasses() {
-  const colors = {
+  const colors = parse({
     red: '#ff0000',
     blue: '#0000ff',
-  };
+  });
 
   test('creates specified classes for each color', () => {
     const properties = {
@@ -148,11 +141,11 @@ function testGenerateClasses() {
   });
 
   test('snapshot', () => {
-    const colors = {
+    const colors = parse({
       red: '#ff0000',
       white: '#fff',
       blue: '#0000ff',
-    };
+    });
 
     const config = {
       properties: {
@@ -171,11 +164,11 @@ function testGenerateClasses() {
 
 function testGenerateProps() {
   test('snapshot', () => {
-    const colors = {
+    const colors = parse({
       red: '#ff0000',
       white: '#fff',
       blue: '#0000ff',
-    };
+    });
 
     const classes = {
       'button': 'white',
@@ -198,9 +191,9 @@ function testGenerateProps() {
   });
 
   test('values with alpha use rgba notation', () => {
-    const colors = {
+    const colors = parse({
       white: '#fff',
-    };
+    });
 
     const classes = {
       'button': 'white a(0.5)',

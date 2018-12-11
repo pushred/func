@@ -6,7 +6,7 @@ const { writeFileSync } = require('fs');
 const { Cli, log, Watcher } = require('func-cli');
 const { DEFAULTS } = require('func-cli/lib/consts');
 const { parse } = require('./lib/colors');
-const { expandClasses, expandPalette, generateClasses, generateProps } = require('./lib/generator');
+const { expandClasses, generateClasses, generateProps } = require('./lib/generator');
 
 const HELP = `
   Usage
@@ -49,6 +49,8 @@ const FLAGS = {
  */
 
 function generate(config) {
+  config.colors = parse(config.colors);
+
   return Promise.all([
     generateStylesheet(config),
     generateJson(config),
@@ -70,11 +72,9 @@ function generateStylesheet({ func, classes, colors } = {}) {
 }
 
 function generateTokens({ colors = {} } = {}) {
-  const palette = expandPalette({ colors });
-
-  const tokens = Object.keys(palette).reduce((tokens, colorName) => ({
+  const tokens = Object.keys(colors).reduce((tokens, colorName) => ({
     ...tokens,
-    [colorName]: palette[colorName].hex(),
+    [colorName]: colors[colorName].hex(),
   }), {});
 
   return JSON.stringify(tokens, null, 2);
@@ -135,5 +135,5 @@ Cli(HELP, FLAGS)
       : updateOutput(config)
   ))
   .catch(err => {
-    throw new Error(err);
+    throw err;
   });
