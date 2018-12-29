@@ -68,15 +68,12 @@ function expandClasses({ classes = {}, colors = {} }) {
       });
 
     const colorKey = props[0];
-    const chromaColor = colors[colorKey];
+    const colorData = colors[colorKey];
 
-    const adjustedColor = adjusterFn && adjustColor(chromaColor, adjusterFn[0]);
-
-    const colorValue = chromaColor
-      ? (adjustedColor || chromaColor).css('hsl')
-      : colorKey; // assume any values missing in parsed colors are keywords or other values that should be used as-is
-
-    if (!colorValue) return output;
+    // assume any values missing from palette are CSS keywords that should be used as-is
+    let colorValue = colorKey;
+    if (colorData && !adjusterFn) colorValue = colorData.color.css('hsl');
+    if (adjusterFn) colorValue = adjustColor(colorData.color, adjusterFn[0]).css('hsl');
 
     const styles = `${property}: ${colorValue.replace(/,/g, ', ')}`;
     const hasInteractState = value.includes('focus') || value.includes('hover');
@@ -104,7 +101,7 @@ function generateClasses({ colors = {}, properties = {}, states = [] }) {
       ...Object.keys(properties).map(property => {
         const className = properties[property].replace('${name}', colorName);
 
-        const styles = `${property}: ${colorValue.css('hsl').replace(/,/g, ', ')}`;
+        const styles = `${property}: ${colorValue.color.css('hsl').replace(/,/g, ', ')}`;
 
         return [
           `.${className} { ${styles} }`,
@@ -129,17 +126,19 @@ function generateProps({ classes = {}, colors = {} }) {
       : value.split(/\s/);
 
     const colorKey = props[0];
-    const colorValue = adjusterFn
-      ? adjustColor(colors[colorKey], adjusterFn[0])
-      : colors[colorKey];
+    const colorData = colors[colorKey];
 
-    if (!colorValue) return output;
+    if (colorData === undefined) return output;
+
+    const chromaColor = adjusterFn
+      ? adjustColor(colorData.color, adjusterFn[0])
+      : colorData.color;
 
     return {
       ...output,
-      [camelCase(className)]: colorValue.alpha() === 1
-        ? colorValue.hex()
-        : colorValue.css('rgba').replace(/,/g, ', ')
+      [camelCase(className)]: chromaColor.alpha() === 1
+        ? chromaColor.hex()
+        : chromaColor.css('rgba').replace(/,/g, ', ')
     };
   }, {});
 
@@ -147,7 +146,7 @@ function generateProps({ classes = {}, colors = {} }) {
     if (!colors[colorName]) return output;
     return {
       ...output,
-      [camelCase(colorName)]: colors[colorName].hex()
+      [camelCase(colorName)]: colors[colorName].color.hex()
     };
   }, {});
 

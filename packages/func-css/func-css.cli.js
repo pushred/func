@@ -74,7 +74,7 @@ function generateStylesheet({ func, classes, colors } = {}) {
 function generateTokens({ colors = {} } = {}) {
   const tokens = Object.keys(colors).reduce((tokens, colorName) => ({
     ...tokens,
-    [colorName]: colors[colorName].hex(),
+    [colorName]: colors[colorName].hex,
   }), {});
 
   return JSON.stringify(tokens, null, 2);

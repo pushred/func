@@ -36,7 +36,14 @@ const STOP_NAMES = {
 function parse(colors = {}) {
   return Object.keys(colors).reduce((output, colorKey) => {
     const rawColor = colors[colorKey];
-    if (typeof rawColor === 'string') output[colorKey] = chroma(rawColor);
+
+    if (typeof rawColor === 'string') {
+      output[colorKey] = getColorData({
+        color: chroma(rawColor),
+        colorName: colorKey,
+      });
+    }
+
     if (!isPlainObject(rawColor)) return output;
 
     const config = Object.keys(rawColor).reduce((config, key) => {
@@ -52,7 +59,7 @@ function parse(colors = {}) {
     let colorModelName = Object.keys(config.color).map(val => val[0]).join('');
     if (colorModelName === 'hsb') colorModelName = 'hsv';
 
-    const color = Object.keys(config.color).map(key => {
+    const colorSpec = Object.keys(config.color).map(key => {
       const originalValue = config.color[key];
       const isPctValue = ['s', 'b', 'l', 'v'].includes(key[0]);
       if (!isPctValue) return originalValue;
@@ -65,18 +72,18 @@ function parse(colors = {}) {
     });
 
     const hasHue = colorModelName === 'hsl' || colorModelName === 'hsv';
-    const isBlack = color[1] === 0 && color[2] === 0;
-    const isWhite = color[1] === 0 && color[2] === 1;
+    const isBlack = colorSpec[1] === 0 && colorSpec[2] === 0;
+    const isWhite = colorSpec[1] === 0 && colorSpec[2] === 1;
 
-    if (hasHue && color[0] === 0 && (isBlack || isWhite)) {
+    if (hasHue && colorSpec[0] === 0 && (isBlack || isWhite)) {
       throw new Error('`0` is not a valid hue, pure black/white have none');
     }
 
-    const baseColor = chroma.call(null, color, colorModelName);
+    const baseColor = chroma.call(null, colorSpec, colorModelName);
 
     return {
       ...output,
-      [colorKey]: baseColor,
+      [colorKey]: getColorData({ color: baseColor, colorName: colorKey }),
       ...Object.keys(config.mixtures).reduce((mixtures, mixture) => ({
         ...mixtures,
         ...getMixtures({
@@ -89,6 +96,24 @@ function parse(colors = {}) {
     };
   }, {});
 }
+
+/**
+ * getColorData
+ * Expands parsed color metadata
+ * @param {String} colorName
+ * @param {Color} color
+ * @private
+ */
+
+ function getColorData({ color, colorName }) {
+  return {
+    color,
+    colorName,
+    hex: color.hex('rgb'),
+    hsl: color.css('hsl'),
+    rgb: color.css('rgb'),
+  };
+ }
 
 /**
  * getMixtures
@@ -113,7 +138,13 @@ function getMixtures({ baseColor, colorName, method, stops = 2 } = {}) {
     color2: mixColor,
   }).reduce((values, value, index) => ({
     ...values,
-    [`${STOP_NAMES[method][index]}-${colorName}`]: value,
+    [`${STOP_NAMES[method][index]}-${colorName}`]: {
+      ...getColorData({ color: value, colorName }),
+      mixture: {
+        method,
+        stop: STOP_NAMES[method],
+      },
+    },
   }), {});
 }
 

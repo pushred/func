@@ -3,7 +3,7 @@ const { mix, parse } = require('./colors');
 
 function mixTests() {
   const palette = parse({ red: '#ff0000' });
-  const mixtures = mix({ color1: palette.red, color2: chroma('white'), stops: 3  });
+  const mixtures = mix({ color1: palette.red.color, color2: chroma('white'), stops: 3  });
 
   test('mix stops', () => {
     expect(mixtures).toHaveLength(3);
@@ -22,7 +22,8 @@ function parseTests() {
   test('hex values', () => {
     const palette = { red: '#ff0000' };
     const output = parse(palette);
-    expect(output.red.constructor.name).toEqual('Color');
+
+    expect(output.red.color.constructor.name).toEqual('Color');
   });
 
   test('color model values (terse)', () => {
@@ -35,7 +36,7 @@ function parseTests() {
     };
 
     const output = parse(palette);
-    expect(output.red.constructor.name).toEqual('Color');
+    expect(output.red.color.constructor.name).toEqual('Color');
   });
 
   test('color model values (verbose)', () => {
@@ -48,7 +49,7 @@ function parseTests() {
     };
 
     const output = parse(palette);
-    expect(output.red.constructor.name).toEqual('Color');
+    expect(output.red.color.constructor.name).toEqual('Color');
   });
 
   test('string percentages are converted', () => {
@@ -62,7 +63,7 @@ function parseTests() {
 
     const output = parse(palette);
 
-    const hslRed = output.red.hsl();
+    const hslRed = output.red.color.hsl();
 
     expect(hslRed[0]).toBeCloseTo(0);
     expect(hslRed[1]).toBeCloseTo(0.65);
@@ -80,7 +81,7 @@ function parseTests() {
 
     const output = parse(palette);
 
-    const hslRed = output.red.hsl();
+    const hslRed = output.red.color.hsl();
 
     expect(hslRed[0]).toBeCloseTo(0);
     expect(hslRed[1]).toBeCloseTo(0.647);
@@ -108,9 +109,9 @@ function parseTests() {
 
     const output = parse(palette);
 
-    const hslRed = output.red.hsl();
-    const hslGreen = output.green.hsl();
-    const hslBlue = output.blue.hsl();
+    const hslRed = output.red.color.hsl();
+    const hslGreen = output.green.color.hsl();
+    const hslBlue = output.blue.color.hsl();
 
     expect(hslRed[0]).toBeCloseTo(0);
     expect(hslRed[1]).toBeCloseTo(1);
@@ -153,8 +154,10 @@ function parseTests() {
       expect.arrayContaining(['gray', 'dark-gray', 'darker-gray'])
     );
 
+    expect(Object.keys(output)).toHaveLength(3);
+
     Object.values(output).forEach(val => {
-      expect(val.constructor.name).toEqual('Color');
+      if (val.mixture) expect(val.mixture.method).toEqual('shade');
     });
   });
 
@@ -174,8 +177,10 @@ function parseTests() {
       expect.arrayContaining(['gray', 'light-gray', 'lighter-gray'])
     );
 
+    expect(Object.keys(output)).toHaveLength(3);
+
     Object.values(output).forEach(val => {
-      expect(val.constructor.name).toEqual('Color');
+      if (val.mixture) expect(val.mixture.method).toEqual('tint');
     });
   });
 }
