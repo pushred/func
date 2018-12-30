@@ -142,7 +142,7 @@ function getMixtures({ baseColor, colorName, method, stops = 2 } = {}) {
       ...getColorData({ color: value, colorName }),
       mixture: {
         method,
-        stop: STOP_NAMES[method],
+        stop: STOP_NAMES[method][index],
       },
     },
   }), {});
