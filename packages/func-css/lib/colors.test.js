@@ -16,6 +16,10 @@ function mixTests() {
 
     expect(step1).toBeCloseTo(step2);
   });
+
+  test('final stop is not the mix color', () => {
+    expect(mixtures[2].name()).not.toEqual('white');
+  });
 }
 
 function parseTests() {

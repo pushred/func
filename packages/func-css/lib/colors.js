@@ -158,10 +158,10 @@ function getMixtures({ baseColor, colorName, method, stops = 2 } = {}) {
  */
 
 function mix({ color1, color2, stops = 2 } = {}) {
-  const ratioIncrement = 1 / stops;
-  return [...Array(stops)].map((stop, index) => (
-    chroma.mix(color1, color2, ratioIncrement * (index + 1))
-  ));
+  const ratioIncrement = 1 / (stops + 1);
+  return [...Array(stops)].map((stop, index) => {
+    return chroma.mix(color1, color2, ratioIncrement * (index + 1))
+  });
 }
 
 module.exports = {
