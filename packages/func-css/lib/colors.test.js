@@ -5,16 +5,18 @@ function mixTests() {
   const palette = parse({ red: '#ff0000' });
   const mixtures = mix({ color1: palette.red.color, color2: chroma('white'), stops: 3  });
 
-  test('mix stops', () => {
+  test('adjustable mix stops', () => {
     expect(mixtures).toHaveLength(3);
+    const mixtures2 = mix({ color1: palette.red.color, color2: chroma('white'), stops: 4  });
+    expect(mixtures2).toHaveLength(4);
   });
 
-  test('steps are equidistant', () => {
+  test('stops are equidistant', () => {
     const lightness = mixtures.map(color => color.hsl()[2]);
-    const step1 = lightness[0] - lightness[1];
-    const step2 = lightness[1] - lightness[2];
+    const stop1 = lightness[0] - lightness[1];
+    const stop2 = lightness[1] - lightness[2];
 
-    expect(step1).toBeCloseTo(step2);
+    expect(stop1).toBeCloseTo(stop2);
   });
 
   test('final stop is not the mix color', () => {
@@ -148,7 +150,7 @@ function parseTests() {
         hue: 360,
         saturation: 0,
         brightness: 0,
-        shades: 3,
+        shades: 2,
       },
     };
 
@@ -171,7 +173,7 @@ function parseTests() {
         hue: 360,
         saturation: 0,
         brightness: 0,
-        tints: 3,
+        tints: 2,
       },
     };
 

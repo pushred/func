@@ -90,7 +90,7 @@ function parse(colors = {}) {
           baseColor,
           colorName: colorKey,
           method: mixture.slice(0, -1), // singular
-          stops: config.mixtures[mixture].stops,
+          stops: config.mixtures[mixture],
         }),
       }), {}),
     };
