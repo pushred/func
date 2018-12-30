@@ -1,0 +1,12 @@
+{
+  "red": "#ff0000",
+  "light-red": "#ff3333",
+  "lighter-red": "#ff6666",
+  "lightest-red": "#ff9999",
+  "x-light-red": "#ffcccc",
+  "blue": "#0000ff",
+  "green": "#267326",
+  "gray": "#808080",
+  "light-gray": "#aaaaaa",
+  "lighter-gray": "#d5d5d5"
+}

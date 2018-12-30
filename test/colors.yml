@@ -1,8 +1,10 @@
 red:
 
-  hue: 0
+  hue: 360
   saturation: 100%
   lightness: 50%
+
+  tints: 4
 
 blue:
 
@@ -10,10 +12,16 @@ blue:
   saturation: 100%
   lightness: 50%
 
-  tints: 5
-
 green:
 
   hue: 120
   saturation: 50%
   lightness: 30%
+
+gray:
+
+  hue: 180
+  saturation: 0%
+  lightness: 50%
+
+  tints: 2

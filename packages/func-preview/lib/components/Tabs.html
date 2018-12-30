@@ -1,0 +1,38 @@
+<div class="tabs">
+  <div role="tablist">
+    {#each data as tab}
+      <button role="tab" aria-selected={tab.id === selected} aria-controls={tab.id} id="{tab.id}-label" on:click="fire('select', { id: tab.id })">{tab.text}</button>
+    {/each}
+  </div>
+  {#each data as tab}
+    <div tabindex="0" role="tabpanel" id={tab.id} aria-labelledby="{tab.id}-label" />
+  {/each}
+</div>
+
+<slot></slot>
+
+<style>
+  [role=tablist] {
+    margin-bottom: 1em;
+  }
+
+  [role=tab] {
+    font-family: inherit;
+    user-select: none;
+    appearance: none;
+    outline: none;
+
+    cursor: pointer;
+    margin: 0 .5em 0 0;
+    border: 0;
+    padding: 0 0.5em;
+    line-height: 2;
+    border: 2px solid #ccc;
+    font-size: 1em;
+    border-radius: 0.5em;
+  }
+
+  button[aria-selected="true"] {
+    background-color: #ccc;
+  }
+</style>

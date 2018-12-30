@@ -2,26 +2,47 @@
   import BackgroundColor from '../components/BackgroundColor.html';
   import Color from '../components/Color.html';
   import Generic from '../components/Generic.html';
+  import Tabs from '../components/Tabs.html';
 
   export default {
     components: {
       BackgroundColor,
       Color,
       Generic,
+      Tabs,
+    },
+    data() {
+      return {
+        selectedTab: 'colors',
+      };
     }
   };
 </script>
 
-{#each Object.values(colors) as color}
-  <BackgroundColor backgroundColor={color.hex} name={color.colorName} mixture={color.mixture} />
-{/each}
-
-{#each index as style}
-  {#if style.props[0].property === 'color'}
-    <Color style={style} />
-  {:elseif style.props[0].property === 'background-color'}
-    <BackgroundColor backgroundColor={style.props[0].value} name={style.selector} />
-  {:else}
-    <Generic style={style} />
+<Tabs
+  data={[{
+    id: 'colors',
+    text: 'Colors',
+  }, {
+    id: 'classes',
+    text: 'Classes',
+  }]}
+  selected={selectedTab}
+  on:select="set({ selectedTab: event.id })"
+>
+  {#if selectedTab === 'colors'}
+    {#each Object.values(colors) as color}
+      <BackgroundColor backgroundColor={color.hex} name={color.colorName} mixture={color.mixture} />
+    {/each}
+  {:elseif selectedTab === 'classes'}
+    {#each index as style}
+      {#if style.props[0].property === 'color'}
+        <Color style={style} />
+      {:elseif style.props[0].property === 'background-color'}
+        <BackgroundColor backgroundColor={style.props[0].value} name={style.selector} />
+      {:else}
+        <Generic style={style} />
+      {/if}
+    {/each}
   {/if}
-{/each}
+</Tabs>

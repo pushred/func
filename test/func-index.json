@@ -22,7 +22,34 @@
     "props": [
       {
         "property": "background-color",
-        "value": "hsl(0, 0%, 0%)"
+        "value": "hsl(240, 100%, 50%)"
+      }
+    ]
+  },
+  {
+    "selector": ".bg-gray",
+    "props": [
+      {
+        "property": "background-color",
+        "value": "hsl(0, 0%, 50%)"
+      }
+    ]
+  },
+  {
+    "selector": ".bg-light-gray",
+    "props": [
+      {
+        "property": "background-color",
+        "value": "hsl(0, 0%, 66.67%)"
+      }
+    ]
+  },
+  {
+    "selector": ".bg-lighter-gray",
+    "props": [
+      {
+        "property": "background-color",
+        "value": "hsl(0, 0%, 83.33%)"
       }
     ]
   }

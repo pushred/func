@@ -1,3 +1,6 @@
 error: red
 button: green
 bg-button: blue
+bg-gray: gray
+bg-light-gray: light-gray
+bg-lighter-gray: lighter-gray
