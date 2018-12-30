@@ -1,8 +1,6 @@
 const camelCase = require('lodash.camelcase');
 const kebabCase = require('lodash.kebabcase');
 
-const { parse } = require('./colors');
-
 /**
  * adjustColor
  * Applies Chroma.js functions
