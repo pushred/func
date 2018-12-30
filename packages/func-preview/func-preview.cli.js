@@ -89,7 +89,7 @@ function watch({
   const watcher = rollup.watch({
     ...rollupOptions,
     watch: {
-      // chokidar: false,
+      chokidar: false,
       include: [
         ...Object.values(config.paths),
         join(__dirname, './lib/**/*'),
