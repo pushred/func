@@ -3,6 +3,7 @@
 const { copyFileSync } = require('fs');
 const { basename, join } = require('path');
 
+const chokidar = require('chokidar');
 const server = require('live-server');
 const tmp = require('tmp');
 
@@ -29,13 +30,15 @@ const FLAGS = {
   },
 };
 
+const INDEX_PAGE = join(__dirname, 'lib', 'index.html');
+
 function initialBundle({ config }) {
   const tmpDir = tmp.dirSync();
   const tmpDirPath = tmpDir.name;
 
   debug('tmp directory created:', tmpDirPath);
 
-  copyFileSync(join(__dirname, 'lib', 'index.html'), join(tmpDirPath, 'index.html'));
+  copyFileSync(INDEX_PAGE, join(tmpDirPath, 'index.html'));
 
   const rollupOptions = {
     input: join(__dirname, 'lib', 'preview.js'),
@@ -60,7 +63,7 @@ function initialBundle({ config }) {
   return Promise.resolve(rollup.rollup(rollupOptions))
     .then(bundle => bundle.write(rollupOptions.output))
     .then(() => startServer({ tmpDirPath, outputPath: basename(config.paths.stylesheet) }))
-    .then(() => ({ config, rollupOptions }))
+    .then(() => ({ config, rollupOptions, tmpDirPath }))
     .catch(console.error);
 }
 
@@ -81,19 +84,24 @@ function watch({
     paths: {},
   },
   rollupOptions,
+  tmpDirPath,
 } = {}) {
   const watcher = rollup.watch({
     ...rollupOptions,
     watch: {
-      // chokidar: true,
+      // chokidar: false,
       include: [
         ...Object.values(config.paths),
-        join(__dirname, './lib/**'),
+        join(__dirname, './lib/**/*'),
       ],
     },
   });
 
   log.info('watching for changes…')
+
+  chokidar.watch(INDEX_PAGE).on('change', () => {
+    copyFileSync(INDEX_PAGE, join(tmpDirPath, 'index.html'));
+  });
 
   watcher.on('event', event => {
     if (event.code === 'START') log.info('refreshing preview…')
