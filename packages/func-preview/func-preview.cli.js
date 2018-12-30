@@ -12,8 +12,10 @@ const cjsPlugin = require('rollup-plugin-commonjs');
 const jsonPlugin = require('rollup-plugin-json');
 const resolvePlugin = require('rollup-plugin-node-resolve');
 const sveltePlugin = require('rollup-plugin-svelte');
+const virtualPlugin = require('rollup-plugin-virtual');
 
 const { Cli, debug, log } = require('func-cli');
+const { parse } = require('func-css/lib/colors');
 const { DEFAULTS } = require('func-cli/lib/consts');
 
 const HELP = `
@@ -50,6 +52,9 @@ function initialBundle({ config }) {
       jsonPlugin(),
       resolvePlugin(),
       sveltePlugin({ dev: true }),
+      virtualPlugin({
+        'func-colors': `export default ${JSON.stringify(parse(config.colors))}`,
+      }),
     ],
   };
 

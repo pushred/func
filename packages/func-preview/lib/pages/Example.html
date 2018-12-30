@@ -12,11 +12,15 @@
   };
 </script>
 
+{#each Object.values(colors) as color}
+  <BackgroundColor backgroundColor={color.hex} name={color.colorName} mixture={color.mixture} />
+{/each}
+
 {#each index as style}
   {#if style.props[0].property === 'color'}
     <Color style={style} />
   {:elseif style.props[0].property === 'background-color'}
-    <BackgroundColor style={style} />
+    <BackgroundColor backgroundColor={style.props[0].value} name={style.selector} />
   {:else}
     <Generic style={style} />
   {/if}

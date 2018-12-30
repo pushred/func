@@ -1,5 +1,6 @@
-<p class={`swatch ${style.className}`} style={getTextColor(style.props[0].value)}>
-  {style.selector}
+<p class="swatch" style={`background-color: ${backgroundColor}; color: ${getTextColor(backgroundColor)}`}>
+  {name}
+  {#if mixture}<strong>{mixture.method}</strong> {mixture.stop}{/if}
 </p>
 
 <style>
@@ -23,11 +24,9 @@
       console.error(err);
     }
 
-    let textColor = whiteContrast > blackContrast
+    return whiteContrast > blackContrast
       ? 'white'
       : 'black';
-
-    return `color: ${textColor}`;
   }
 
   export default {
