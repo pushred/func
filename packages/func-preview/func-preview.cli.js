@@ -12,7 +12,7 @@ const cjsPlugin = require('rollup-plugin-commonjs');
 const jsonPlugin = require('rollup-plugin-json');
 const resolvePlugin = require('rollup-plugin-node-resolve');
 const sveltePlugin = require('rollup-plugin-svelte');
-const virtualPlugin = require('rollup-plugin-virtual');
+const yamlPlugin = require('rollup-plugin-yaml');
 
 const { Cli, debug, log } = require('func-cli');
 const { parse } = require('func-css/lib/colors');
@@ -45,16 +45,15 @@ function initialBundle({ config }) {
     },
     plugins: [
       aliasPlugin({
-        resolve: ['.js', '.json'],
+        resolve: ['.js', '.json', '.yaml', '.yml'],
+        'func-colors': join(config.basePath, config.func.files.colors),
         'func-index': config.paths.indexJson,
       }),
       cjsPlugin(),
       jsonPlugin(),
+      yamlPlugin(),
       resolvePlugin(),
       sveltePlugin({ dev: true }),
-      virtualPlugin({
-        'func-colors': `export default ${JSON.stringify(parse(config.colors))}`,
-      }),
     ],
   };
 
